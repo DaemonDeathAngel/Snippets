@@ -1,5 +1,5 @@
 expression split %string% [at] every %number% word[s]:
-	return type: texts
+	return type: text
 	get:
 		set {_string::*} to expression-1 split at " "
 		remove "" from {_string::*}
@@ -10,17 +10,23 @@ expression split %string% [at] every %number% word[s]:
 				add {_t} to {_c::*}
 			else:
 				add loop-value-1 to {_c::*}
-				set {_string} to concat {_c::*}
+				set {_string} to concat {_c::*}, "%nl%&r&7"
 				add {_string} to {_s::*}
+				set {_length} to length of {_string}
+				add {_length} to {_l::*}
 				delete {_c::*}
 				set {_a} to 0
-		set {_string} to concat {_s::*}
-		if length of expression-1 is not length of {_string}:
+		set {_length} to sum({_l::*})
+		if {_length} is not length of {_string}:
 			set {_string} to concat {_c::*}
 			add {_string} to {_s::*}
-		return {_s::*}
+		set {_tn} to 0
+		loop size of {_s::*} times:
+			add 1 to {_tn}
+			set {_out} to concat {_out}, {_s::%{_tn}%}
+		return {_out}
 
-command /split:
+command /split <text>:
 	trigger:
-		set {_split::*} to split "What is it that you want me to do? Why aren't you working as completely inte,ded, this is annoying." at every 9 words
+		set {_split::*} to split arg-1 at every 9 words
 		broadcast "Result: %{_split::*}%"	
