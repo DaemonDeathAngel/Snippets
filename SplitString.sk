@@ -1,0 +1,26 @@
+expression split %string% [at] every %number% word[s]:
+	return type: texts
+	get:
+		set {_string::*} to expression-1 split at " "
+		remove "" from {_string::*}
+		loop {_string::*}:
+			add 1 to {_a}
+			if {_a} is not expression-2:
+				set {_t} to concat loop-value-1," "
+				add {_t} to {_c::*}
+			else:
+				add loop-value-1 to {_c::*}
+				set {_string} to concat {_c::*}
+				add {_string} to {_s::*}
+				delete {_c::*}
+				set {_a} to 0
+		set {_string} to concat {_s::*}
+		if length of expression-1 is not length of {_string}:
+			set {_string} to concat {_c::*}
+			add {_string} to {_s::*}
+		return {_s::*}
+
+command /split:
+	trigger:
+		set {_split::*} to split "What is it that you want me to do? Why aren't you working as completely inte,ded, this is annoying." at every 9 words
+		broadcast "Result: %{_split::*}%"	
